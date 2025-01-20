@@ -1,42 +1,44 @@
 import React, { useState } from "react";
+import "../styles/form.css"
 export default function Form({ fields, isShown, onClick, onSubmit }) {
   const [formData, setFormData] = useState(
     fields.reduce((acc, field) => ({ ...acc, [field]: "" }), {})
   );
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(...formData, { [name]: value });
+    const name = e.target.name;
+    const value = e.target.value;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-    onClick();
   };
 
   if (isShown) {
     return (
-      <form onSubmit={handleSubmit}>
+      <form className="form-container" onSubmit={handleSubmit}>
         {fields.map((field) => {
           return (
-            <label key={field}>
+            <label className="form-label" key={field}>
               {field}
               <input
+                className="form-input"
                 type="text"
+                name={field}
+                value={formData[field]}
                 onChange={handleChange}
               />
             </label>
           );
         })}
-        <label>
-          Your Short Descriptoin
-          <textarea></textarea>
-        </label>
-        <button className="cancel" type="button" onClick={onClick}>
-          Cancel
-        </button>
-        <button type="submit">Submit</button>
+        <div className="form-buttons">
+          <button className="form-button cancel" type="button" onClick={onClick}>
+            Cancel
+          </button>
+          <button className="form-button submit"type="submit">Submit</button>
+        </div>
       </form>
     );
   }
